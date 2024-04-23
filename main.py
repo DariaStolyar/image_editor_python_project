@@ -418,20 +418,20 @@ class MyWidget(QMainWindow, Ui_Form):
 
         self.label_2.setText("")  # это нужно для стирания ошибки
         file = open("assets/rotation.txt", encoding="utf8")
-        a, b, c = file.readlines()
-        a, b, c = a[:-1], b[:-1], c
+        right90, left90, rotate180 = file.readlines()
+        right90, left90, rotate180 = right90[:-1], left90[:-1], rotate180
 
         # даем выбор поворота
 
         pov, ok_pressed = QInputDialog.getItem(
             self, "Выберите поворот", "Какой сделать поворот?",
-            (a, b, c), 0, False)
+            (right90, left90, rotate180), 0, False)
         file.close()
         try:
             if ok_pressed:
-                if pov == a:
+                if pov == right90:
                     self.rotate_90_right()
-                elif pov == b:
+                elif pov == left90:
                     self.rotate_90_left()
                 else:
                     self.rotate_180()
@@ -462,25 +462,23 @@ class MyWidget(QMainWindow, Ui_Form):
 
         self.label_2.setText("")  # это нужно для стирания ошибки
         file = open("assets/light.txt", encoding="utf8")
-        a, b, c, d, e = file.readlines()
-        a, b, c, d, e = a[:-1], b[:-1], c[:-1], d[:-1], e
+        light50, dark50, negative, return_all, with_coeff = file.readlines()
+        light50, dark50, negative, return_all, with_coeff = light50[:-1], dark50[:-1], negative[:-1], return_all[:-1], with_coeff
 
         # даем выбор освещенности
 
         svet, ok_pressed = QInputDialog.getItem(
             self, "Выберите свет", "Какой сделать свет?",
-            (a, b, c, d, e), 0, False)
+            (light50, dark50, negative, return_all, with_coeff), 0, False)
         file.close()
+        dict_light = {light50: self.lightning_50,
+                          dark50: self.darkening_50,
+                          negative: self.negative,
+                          return_all: self.return_light}
         try:
             if ok_pressed:
-                if svet == a:
-                    self.lightning_50()
-                elif svet == b:
-                    self.darkening_50()
-                elif svet == c:
-                    self.negative()
-                elif svet == d:
-                    self.return_light()
+                if svet in dict_light:
+                    dict_light[svet]()
                 else:
 
                     # если выбрали с коэффициентом, то запрашиваем коэффициент
@@ -506,37 +504,30 @@ class MyWidget(QMainWindow, Ui_Form):
 
         self.label_2.setText("")  # это нужно для стирания ошибки
         file = open("assets/color.txt", encoding="utf8")
-        a, b, c, d, e, f, g, h, i, j = file.readlines()
-        a, b, c, d, e, f, g, h, i, j = a[:-1], b[:-1], c[:-1], d[:-1], e[:-1], f[:-1], g[:-1], h[:-1], i[:-1], j
+        violet, light_blue, yellow, red, blue, green, super_red, super_blue, super_green, return_all = file.readlines()
+        violet, light_blue, yellow, red, blue, green, super_red, super_blue, super_green, return_all = (
+            violet[:-1], light_blue[:-1], yellow[:-1], red[:-1], blue[:-1], green[:-1], super_red[:-1],
+            super_blue[:-1], super_green[:-1], return_all)
+        dict_color = {violet: self.violet,
+                      light_blue: self.light_blue,
+                      yellow: self.yellow,
+                      red: self.red,
+                      blue: self.blue,
+                      green: self.green,
+                      super_red: self.super_red,
+                      super_blue: self.super_blue,
+                      super_green: self.super_green,
+                      return_all: self.return_light}
 
         # даем выбор цвета
 
         tsvet, ok_pressed = QInputDialog.getItem(
             self, "Выберите свет", "Какой сделать свет?",
-            (a, b, c, d, e, f, g, h, i, j), 0, False)
+            (violet, light_blue, yellow, red, blue, green, super_red, super_blue, super_green, return_all), 0, False)
         file.close()
         try:
             if ok_pressed:
-                if tsvet == a:
-                    self.violet()
-                elif tsvet == b:
-                    self.light_blue()
-                elif tsvet == c:
-                    self.yellow()
-                elif tsvet == d:
-                    self.red()
-                elif tsvet == e:
-                    self.blue()
-                elif tsvet == f:
-                    self.green()
-                elif tsvet == g:
-                    self.super_red()
-                elif tsvet == h:
-                    self.super_blue()
-                elif tsvet == i:
-                    self.super_green()
-                else:
-                    self.return_light()
+                dict_color[tsvet]()
             else:
                 raise Exception
 
@@ -551,25 +542,21 @@ class MyWidget(QMainWindow, Ui_Form):
 
         self.label_2.setText("")  # это нужно для стирания ошибки
         file = open("assets/blackwhite.txt", encoding="utf8")
-        a, b, c, d = file.readlines()
-        a, b, c, d = a[:-1], b[:-1], c[:-1], d
-
+        var4, var3, var2, var1 = file.readlines()
+        var4, var3, var2, var1 = var4[:-1], var3[:-1], var2[:-1], var1
+        dict_color = {var4: self.negative4,
+                      var3: self.negative3,
+                      var2: self.negative2,
+                      var1: self.negative1}
         # даем выбор варианта чёрно-белого
 
         bw, ok_pressed = QInputDialog.getItem(
             self, "Выберите один из вариантов чёрно-белого", "Какой сделать вариант чёрно-белого?",
-            (a, b, c, d), 0, False)
+            (var4, var3, var2, var1), 0, False)
         file.close()
         try:
             if ok_pressed:
-                if bw == a:
-                    self.negative4()
-                elif bw == b:
-                    self.negative3()
-                elif bw == c:
-                    self.negative1()
-                else:
-                    self.negative2()
+                dict_color[bw]()
             else:
                 raise Exception
 
@@ -584,53 +571,45 @@ class MyWidget(QMainWindow, Ui_Form):
 
         self.label_2.setText("")  # это нужно для стирания ошибки
         file = open("assets/frame1.txt", encoding="utf8")
-        a, b = file.readlines()
-        a, b = a[:-1], b
+        with_coeff, without = file.readlines()
+        with_coeff, without = with_coeff[:-1], without
 
         # даем выбор с коэффициента или нет
 
         r1, ok_pressed = QInputDialog.getItem(
             self, "Выберите один из вариантов рамки", "Сделать с указанием коэффициента или нет?",
-            (a, b), 0, False)
+            (with_coeff, without), 0, False)
         try:
             if ok_pressed:
 
                 # загружаем файл и берем из него названия для выбора цвета рамки
 
                 file = open("assets/frame2.txt", encoding="utf8")
-                a, b, c, d = file.readlines()
-                a, b, c, d = a[:-1], b[:-1], c[:-1], d
-                if r1 == "без указания коэффициента":
+                black, white, with_color, gradient = file.readlines()
+                black, white, with_color, gradient = black[:-1], white[:-1], with_color[:-1], gradient
+
+                dict_frame = {black: self.frame_black,
+                              white: self.frame_white,
+                              with_color: self.frame_gradient,
+                              gradient: self.frame_with_coeff}
+
+                if r1 == without:
 
                     # даем выбор цвета рамки
 
                     r2, ok_pressed2 = QInputDialog.getItem(
                         self, "Выберите один из вариантов рамки", "Какую рамку вы хотите?",
-                        (a, b, c, d), 0, False)
+                        (black, white, with_color, gradient), 0, False)
                     if ok_pressed2:
-                        if r2 == a:
-                            self.frame_black()
-                        elif r2 == b:
-                            self.frame_white()
-                        elif r2 == d:
-                            self.frame_gradient()
-                        else:
-                            self.frame_with_coeff()
+                        dict_frame[r2]()
                     else:
                         raise Exception
                 else:
-
-                    # загружаем файл и берем из него названия для выбора цвета рамки
-
-                    file = open("assets/frame2.txt", encoding="utf8")
-                    a, b, c, d = file.readlines()
-                    a, b, c, d = a[:-1], b[:-1], c[:-1], d
-
                     # даем выбор цвета рамки
 
                     r2, ok_pressed2 = QInputDialog.getItem(
                         self, "Выберите один из вариантов рамки", "Какую рамку вы хотите?",
-                        (a, b, c, d), 0, False)
+                        (with_coeff, without, with_color, gradient), 0, False)
                     if ok_pressed2:
 
                         # загружаем картинку и спрашиваем коэффициент
@@ -640,15 +619,12 @@ class MyWidget(QMainWindow, Ui_Form):
                         kof, ok_pressed3 = QInputDialog.getInt(
                             self, "Введите коэффициент", "Какой коэффициент?",
                             20, 0, min(x, y), 1)
+                        dict_frame = {black: self.frame_black(kof),
+                                      white: self.frame_white(kof),
+                                      with_color: self.frame_gradient(kof),
+                                      gradient: self.frame_with_coeff(kof)}
                         if ok_pressed3:
-                            if r2 == "черную":
-                                self.frame_black(kof)
-                            elif r2 == "белую":
-                                self.frame_white(kof)
-                            elif r2 == d:
-                                self.frame_gradient(kof)
-                            else:
-                                self.frame_with_coeff(kof)
+                            dict_frame[r2]
                         else:
                             raise Exception
                     else:
